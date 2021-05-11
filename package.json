@@ -1,0 +1,26 @@
+{
+  "name": "moments-cadence-jstesting",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest -i"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@onflow/fcl": "0.0.68-alpha.21",
+    "@onflow/types": "0.0.4",
+    "dotenv": "^8.2.0",
+    "flow-js-testing": "^0.1.8-beta.0",
+    "jest-environment-uint8array": "^1.0.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "jest": {
+    "testEnvironment": "jest-environment-uint8array",
+    "testSequencer": "./tests/testSequencer.js"
+  }
+}
