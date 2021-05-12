@@ -62,18 +62,24 @@ Run Jest testing suites to test contracts with Scripts and Transactions
 - Simple Transaction
 
 	```
-	flow transactions send ./transactions/setup_account.cdc --signer emulator-account
+	flow transactions send ./transactions/accounts/setupAccount.cdc --signer emulator-account
 	```
 - Transactions with Args
+	Emulator
 
 	```
-	flow transactions send ./transactions/mint_FUSD.cdc --arg Address:0xf8d6e0586b0a20c7 --arg UFix64:1000.0000 --signer emulator-account
-    flow transactions send ./transactions/send_FUSD.cdc --arg UFix64:1200.0000 --arg Address:0x01cf0e2f2f715450 --signer emulator-account
+	flow transactions send ./transactions/FUSD/mintFUSD.cdc --arg Address:0xf8d6e0586b0a20c7 --arg UFix64:1000.0000 --signer emulator-account
+    flow transactions send ./transactions/FUSD/sendFUSD.cdc --arg UFix64:1200.0000 --arg Address:0x01cf0e2f2f715450 --signer emulator-account
+	```
+	Testnet
+
+	```
+	flow transactions send ./transactions/accounts/setupAccount.cdc --network=testnet --signer testnet-account
 	```
 - Scripts
 
 	```
-	flow scripts execute ./scripts/getFUSDbalance.cdc --arg Address:0xf8d6e0586b0a20c7
+	flow scripts execute ./scripts/FUSD/getFUSDbalance.cdc --arg Address:0xf8d6e0586b0a20c7
 	```
 - Using node scripts
 

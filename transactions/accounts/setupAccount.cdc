@@ -1,8 +1,8 @@
-import FUSD from 0xf8d6e0586b0a20c7
-import NonFungibleToken from 0xf8d6e0586b0a20c7
-import Moments from 0xf8d6e0586b0a20c7
-import MomentsMarket from 0xf8d6e0586b0a20c7
-import FungibleToken from 0xf8d6e0586b0a20c7
+import FungibleToken from "../../contracts/FungibleToken.cdc"
+import FUSD from "../../contracts/FUSD.cdc"
+import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
+import Moments from "../../contracts/Moments.cdc"
+import MomentsMarket from "../../contracts/MomentsMarket.cdc"
 
 // This transaction configures an account to hold Moments and SaleOffer items
 // Also configures FUSD Vault
