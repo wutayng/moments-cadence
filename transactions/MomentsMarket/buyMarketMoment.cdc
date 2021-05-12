@@ -4,10 +4,6 @@ import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
 import Moments from "../../contracts/Moments.cdc"
 import MomentsMarket from "../../contracts/MomentsMarket.cdc"
 
-
-// add rake input to send 5% to admin address
-
-
 transaction(itemID: UInt64, marketCollectionAddress: Address) {
     let paymentVault: @FungibleToken.Vault
     let momentsCollection: &Moments.Collection{NonFungibleToken.Receiver}

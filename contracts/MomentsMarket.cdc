@@ -5,7 +5,7 @@ import FungibleToken from "./FungibleToken.cdc"
 
 /*
     This is a Moments initial sale contract for the DApp to use
-    in order to list and sell Moments.
+    in order to list and sell Moments. It includes a rake for sales.
 
     Derived from the KittyItems sample DApp smart contracts
 
@@ -34,7 +34,7 @@ pub contract MomentsMarket {
     // SaleOffer events.
     //
     // A sale offer has been created.
-    pub event SaleOfferCreated(itemID: UInt64, price: UFix64)
+    pub event SaleOfferCreated(itemID: UInt64, price: UFix64, rake: UFix64)
     // Someone has purchased an item that was offered for sale.
     pub event SaleOfferAccepted(itemID: UInt64)
     // A sale offer has been destroyed, with or without being accepted.
@@ -78,8 +78,14 @@ pub contract MomentsMarket {
         // The sale payment price.
         pub let price: UFix64
 
+        // The sale rake.
+        pub let rake: UFix64
+
         // The collection containing that ID.
         access(self) let sellerItemProvider: Capability<&Moments.Collection{NonFungibleToken.Provider}>
+
+        // The FUSD vault that will receive rake payment if the sale completes successfully.
+        access(self) let rakePaymentReceiver: Capability<&FUSD.Vault{FungibleToken.Receiver}>
 
         // The FUSD vault that will receive that payment if the sale completes successfully.
         access(self) let sellerPaymentReceiver: Capability<&FUSD.Vault{FungibleToken.Receiver}>
@@ -90,7 +96,7 @@ pub contract MomentsMarket {
         //
         pub fun accept(
             buyerCollection: &Moments.Collection{NonFungibleToken.Receiver},
-            buyerPayment: @FungibleToken.Vault
+            buyerPayment: @FungibleToken.Vault,
         ) {
             pre {
                 buyerPayment.balance == self.price: "payment does not equal offer price"
@@ -99,6 +105,12 @@ pub contract MomentsMarket {
 
             self.saleCompleted = true
 
+            let rakeWallet <- buyerPayment.withdraw(amount: self.price * self.rake)
+
+            // Deposit rake into the rake vault
+            self.rakePaymentReceiver.borrow()!.deposit(from: <-rakeWallet)
+
+            // Deposit remaining into the receiver vault
             self.sellerPaymentReceiver.borrow()!.deposit(from: <-buyerPayment)
 
             let nft <- self.sellerItemProvider.borrow()!.withdraw(withdrawID: self.itemID)
@@ -122,22 +134,26 @@ pub contract MomentsMarket {
             sellerItemProvider: Capability<&Moments.Collection{NonFungibleToken.Provider}>,
             itemID: UInt64,
             sellerPaymentReceiver: Capability<&FUSD.Vault{FungibleToken.Receiver}>,
-            price: UFix64
+            rakePaymentReceiver: Capability<&FUSD.Vault{FungibleToken.Receiver}>,
+            price: UFix64,
+            rake: UFix64
         ) {
             pre {
                 sellerItemProvider.borrow() != nil: "Cannot borrow seller"
                 sellerPaymentReceiver.borrow() != nil: "Cannot borrow sellerPaymentReceiver"
+                rakePaymentReceiver.borrow() != nil: "Cannot borrow rakePaymentReceiver"
             }
 
             self.saleCompleted = false
 
             self.sellerItemProvider = sellerItemProvider
             self.itemID = itemID
-
             self.sellerPaymentReceiver = sellerPaymentReceiver
+            self.rakePaymentReceiver = rakePaymentReceiver
             self.price = price
+            self.rake = rake
 
-            emit SaleOfferCreated(itemID: self.itemID, price: self.price)
+            emit SaleOfferCreated(itemID: self.itemID, price: self.price, rake: self.rake)
         }
     }
 
@@ -148,13 +164,17 @@ pub contract MomentsMarket {
         sellerItemProvider: Capability<&Moments.Collection{NonFungibleToken.Provider}>,
         itemID: UInt64,
         sellerPaymentReceiver: Capability<&FUSD.Vault{FungibleToken.Receiver}>,
-        price: UFix64
+        rakePaymentReceiver: Capability<&FUSD.Vault{FungibleToken.Receiver}>,
+        price: UFix64,
+        rake: UFix64
     ): @SaleOffer {
         return <-create SaleOffer(
             sellerItemProvider: sellerItemProvider,
             itemID: itemID,
             sellerPaymentReceiver: sellerPaymentReceiver,
-            price: price
+            rakePaymentReceiver: rakePaymentReceiver,
+            price: price,
+            rake: rake
         )
     }
 

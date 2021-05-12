@@ -40,7 +40,7 @@ test('Get Moments from Sample Accounts', async () => {
   });
 
 // send Moments
-test('Send FUSD to/from Sample Accounts', async () => {
+test('Send Moments to/from Sample Accounts', async () => {
     await sendMoments("Ben", "Colin", 2);
     const moments = await getMoments("Colin");
     expect(moments.length).toBe(1)

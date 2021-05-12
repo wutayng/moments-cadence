@@ -4,8 +4,9 @@ import NonFungibleToken from "../../contracts/NonFungibleToken.cdc"
 import Moments from "../../contracts/Moments.cdc"
 import MomentsMarket from "../../contracts/MomentsMarket.cdc"
 
-transaction(itemID: UInt64, price: UFix64) {
+transaction(itemID: UInt64, price: UFix64, rakeAddress: Address, rake: UFix64) {
     let FUSDVault: Capability<&FUSD.Vault{FungibleToken.Receiver}>
+    let FUSDRakeVault: Capability<&FUSD.Vault{FungibleToken.Receiver}>
     let MomentsCollection: Capability<&Moments.Collection{NonFungibleToken.Provider, Moments.MomentsCollectionPublic}>
     let MarketCollection: &MomentsMarket.Collection
 
@@ -15,6 +16,10 @@ transaction(itemID: UInt64, price: UFix64) {
 
         self.FUSDVault = signer.getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver)!
         assert(self.FUSDVault.borrow() != nil, message: "Missing or mis-typed FUSD receiver")
+
+        let rakeAccount = getAccount(rakeAddress)
+        self.FUSDRakeVault = rakeAccount.getCapability<&FUSD.Vault{FungibleToken.Receiver}>(/public/fusdReceiver)!
+        assert(self.FUSDRakeVault.borrow() != nil, message: "Missing or mis-typed FUSD Rake receiver")
 
         if !signer.getCapability<&Moments.Collection{NonFungibleToken.Provider, Moments.MomentsCollectionPublic}>(MomentsCollectionProviderPrivatePath)!.check() {
             signer.link<&Moments.Collection{NonFungibleToken.Provider, Moments.MomentsCollectionPublic}>(MomentsCollectionProviderPrivatePath, target: Moments.CollectionStoragePath)
@@ -40,7 +45,9 @@ transaction(itemID: UInt64, price: UFix64) {
             sellerItemProvider: self.MomentsCollection,
             itemID: itemID,
             sellerPaymentReceiver: self.FUSDVault,
-            price: price
+            rakePaymentReceiver: self.FUSDRakeVault,
+            price: price,
+            rake: rake
         )
         self.MarketCollection.insert(offer: <-offer)
     }
