@@ -16,16 +16,16 @@ fjs.init(path.resolve(__dirname, "../"));
 test('Mint Moments to Sample Account 1', async () => {
     const metadata_1 = [
         { key: "name", value: "NFT 1 Qty 5"},
-        { key: "key1", value: "value1"},
-        { key: "key2", value: "value2"},
+        { key: "description", value: "Description of NFT"},
+        { key: "Author", value: "FirstName LastName"},
         { key: "ipfs", value: "uri_string_identifier0124093485823213"}
     ]
     await mintMoments(config["0xAdmin"], "Ben", 5, metadata_1);
 
     const metadata_2 = [
         { key: "name", value: "NFT 2 Qty 3"},
-        { key: "key1", value: "value1"},
-        { key: "key2", value: "value2"},
+        { key: "description", value: "Description of NFT"},
+        { key: "Author", value: "FirstName LastName"},
         { key: "ipfs", value: "uri_string_identifier0124002982344329"}
     ]
     await mintMoments(config["0xAdmin"], "Sarah", 3, metadata_1);

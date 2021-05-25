@@ -75,11 +75,14 @@ Run Jest testing suites to test contracts with Scripts and Transactions
 
 	```
 	flow transactions send ./transactions/accounts/setupAccount.cdc --network=testnet --signer testnet-account
+	flow transactions send ./transactions/Moments/mintMoments.cdc --network=testnet --signer testnet-account --args-json '[{"type":"Address","value":"0x633d28d54651d07c"},{"type":"Int","value":"3"},{"type":"Dictionary","value":[{"key":{"type":"String","value":"name"},"value":{"type":"String","value":"test"}},{"key":{"type":"String","value":"ipfs"},"value":{"type":"String","value":"ipfs link string"}}]}]'
 	```
 - Scripts
 
 	```
 	flow scripts execute ./scripts/FUSD/getFUSDbalance.cdc --arg Address:0xf8d6e0586b0a20c7
+	flow scripts execute ./scripts/Moments/getMoments.cdc --network=testnet --arg Address:0x633d28d54651d07c
+
 	```
 - Using node scripts
 
@@ -88,6 +91,9 @@ Run Jest testing suites to test contracts with Scripts and Transactions
 	```
 	node transactions/FUSD/mintFUSD.js
 	```
+
+## Testnet Deployment
+```flow project deploy --network=testnet```
     
 ## Attribution
 
