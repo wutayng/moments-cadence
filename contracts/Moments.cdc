@@ -35,16 +35,19 @@ pub contract Moments: NonFungibleToken {
         pub let momentid: UInt64
         // The token's serial number (multiple minting)
         pub let serial: Int
+        // The total quantity of serial numbers (multiple minting)
+        pub let serialCount: Int
         // The token's metadata as a string  mapping
         // Can be changed (var)
         pub var metadata: {String : String}
 
         // initializer
         //
-        init(initID: UInt64, initmomentID: UInt64, initSerial: Int, initMetadata: {String : String}) {
+        init(initID: UInt64, initmomentID: UInt64, initSerial: Int, totalSerials: Int, initMetadata: {String : String}) {
             self.id = initID
             self.momentid = initmomentID
             self.serial = initSerial
+            self.serialCount = totalSerials
             self.metadata = initMetadata
         }
     }
@@ -171,7 +174,7 @@ pub contract Moments: NonFungibleToken {
                 emit Minted(id: Moments.totalSupply)
 
                 // deposit it in the recipient's account using their reference
-                recipient.deposit(token: <-create Moments.NFT(initID: Moments.totalSupply, initmomentID: Moments.totalMomentIDs, initSerial: serialNumber, initMetadata: metadata))
+                recipient.deposit(token: <-create Moments.NFT(initID: Moments.totalSupply, initmomentID: Moments.totalMomentIDs, initSerial: serialNumber, totalSerials: serialQuantity, initMetadata: metadata))
 
                 serialNumber = serialNumber + 1
 
@@ -202,9 +205,9 @@ pub contract Moments: NonFungibleToken {
     //
     init() {
         // Set our named paths
-        self.CollectionStoragePath = /storage/ee592697c63ebbed_momentsCollection
-        self.CollectionPublicPath = /public/ee592697c63ebbed_momentsCollection
-        self.MinterStoragePath = /storage/ee592697c63ebbed_momentsMinter
+        self.CollectionStoragePath = /storage/c96ac2e4cab43ad7_momentsCollection
+        self.CollectionPublicPath = /public/c96ac2e4cab43ad7_momentsCollection
+        self.MinterStoragePath = /storage/c96ac2e4cab43ad7_momentsMinter
 
         // Initialize the total supply
         self.totalSupply = 0

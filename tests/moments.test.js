@@ -37,6 +37,7 @@ test('Get Moments from Sample Accounts', async () => {
     expect(moments.length).toBe(5)
     expect(moments[0]["metadata"]["name"]).toBe("NFT 1 Qty 5");
     expect(moments[3]["serial"]).toBe(4);
+    expect(moments[3]["serialCount"]).toBe(5);
   });
 
 // send Moments

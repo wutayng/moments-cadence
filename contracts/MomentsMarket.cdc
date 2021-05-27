@@ -310,7 +310,7 @@ pub contract MomentsMarket {
     }
 
     init () {
-        self.CollectionStoragePath = /storage/ee592697c63ebbed_momentsMarketCollection
-        self.CollectionPublicPath = /public/ee592697c63ebbed_momentsMarketCollection
+        self.CollectionStoragePath = /storage/c96ac2e4cab43ad7_momentsMarketCollection
+        self.CollectionPublicPath = /public/c96ac2e4cab43ad7_momentsMarketCollection
     }
 }
