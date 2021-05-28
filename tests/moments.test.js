@@ -18,7 +18,8 @@ test('Mint Moments to Sample Account 1', async () => {
         { key: "name", value: "NFT 1 Qty 5"},
         { key: "description", value: "Description of NFT"},
         { key: "Author", value: "FirstName LastName"},
-        { key: "ipfs", value: "uri_string_identifier0124093485823213"}
+        { key: "ipfs", value: "uri_string_identifier0124093485823213"},
+        { key: "assetType", value: "video"}
     ]
     await mintMoments(config["0xAdmin"], "Ben", 5, metadata_1);
 
@@ -26,7 +27,8 @@ test('Mint Moments to Sample Account 1', async () => {
         { key: "name", value: "NFT 2 Qty 3"},
         { key: "description", value: "Description of NFT"},
         { key: "Author", value: "FirstName LastName"},
-        { key: "ipfs", value: "uri_string_identifier0124002982344329"}
+        { key: "ipfs", value: "uri_string_identifier0124002982344329"},
+        { key: "assetType", value: "image"}
     ]
     await mintMoments(config["0xAdmin"], "Sarah", 3, metadata_1);
 });
